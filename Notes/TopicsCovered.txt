@@ -1,0 +1,75 @@
+This Repo is divided into three parts, mirroring the structure of a typical trading desk:
+
+Part 1: Cash, Repo, and Swap Markets
+
+Topic 1: Fixed-Income Basics
+
+Covers the basics of bonds, including:
+Time value of money (e.g., 100 today is worth more than 100 in a year).
+Price-yield relationship (how bond prices change with interest rates).
+Sensitivity measures like PV01 (price change for a 1 basis point move in yield) and convexity (how bond price changes as yields change).
+Explains the repo market, where banks borrow/lend securities (like U.S. Treasuries) for short periods.
+
+Topic 2: Pricing Plain-Vanilla Swaps
+
+Explains how swaps are priced using:
+Discount factors: The present value of future cash flows.
+Forward curves: Projected future interest rates.
+
+Example: If you have a 5-year swap, you need to know the expected interest rates for each year to calculate the cash flows.
+
+Topic 3: Swap Market Instruments
+
+Discusses how swaps are traded in practice, including:
+Broker screens: Where traders see swap prices.
+Spreads: The difference between swap rates and Treasury rates.
+Explains how swaps are customized (e.g., choosing specific payment dates).
+
+Topic 4: Basis Swaps
+
+Basis swaps involve exchanging cash flows based on different floating rates (e.g., 3-month LIBOR vs. 6-month LIBOR).
+Explains the growing importance of OIS (Overnight Indexed Swaps), which are tied to overnight rates and are used for margining swaps.
+
+-------------------------------------------------------------------------------------------------------
+
+Part 2: Interest-Rate Flow Options
+
+Topic 5: Option Replication
+
+Explains how options can be replicated using a binomial model (a simple model where prices move up or down in discrete steps).
+Example: If you have a call option, you can replicate it by buying/selling the underlying asset in a way that mimics the option's payoff.
+
+Topic 6: Black-Scholes and Black’s Formula
+
+Introduces the Black-Scholes model for pricing options.
+Explains Black’s Formula, which is used for pricing interest rate options like caps, floors, and swaptions.
+
+Example: If you have a cap (which limits how high a floating rate can go), you can use Black’s Formula to price it.
+
+Topic 7: Trading Flow Options
+
+Explains how flow options (like caps, floors, and swaptions) are traded in practice.
+Introduces the SABR model, which is used to capture volatility skews and smiles (where implied volatility varies with strike prices).
+
+
+--------------------------------------------------------------------------------------------------
+Part 3: Interest-Rate Exotics
+
+Topic 8: Short-Rate Models
+
+Explains models like Hull-White and BDT (Black-Derman-Toy), which are used to price more complex products like Bermudan swaptions.
+Example: A Bermudan swaption allows the holder to enter into a swap at multiple dates, not just one.
+
+Topic 9: Bermudan Options
+
+Explains how to price Bermudan options using backward induction (a method where you start at the end of the option’s life and work backward to find its value today).
+
+Topic 10: HJM Models
+
+Introduces Heath-Jarrow-Morton (HJM) models, which model the entire term structure of interest rates.
+These models are more complex but provide a more accurate way to price exotics.
+
+Topic 11: Numeraires and Forward Measures
+
+Explains how to change numeraires (the unit in which prices are measured) to simplify pricing.
+Example: By switching to a forward measure, you can justify using Black’s Formula for interest rate options.
