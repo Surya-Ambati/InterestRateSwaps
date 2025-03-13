@@ -56,22 +56,22 @@ app.layout = html.Div([
             # General Inputs
             html.H3("General Inputs"),
             html.Label("Present Value (PV):"),
-            dcc.Slider(id='PV', min=50.0, max=200.0, step=5.0, value=100.0, marks={50: '50', 200: '200'}, updatemode='drag'),
+            dcc.Slider(id='PV', min=50.0, max=10000.0, step=5.0, value=100.0, marks={50: '50', 10000: '10000'}, updatemode='drag'),
             html.Label("Annual Interest Rate (r):"),
             dcc.Slider(id='r', min=0.01, max=1.00, step=0.01, value=0.05, marks={0.01: '1%', 1.00: '100%'}, updatemode='drag'),
             html.Label("Compounding Periods per Year (m):"),
             dcc.Slider(id='m', min=1, max=12, step=1, value=2, marks={1: '1', 12: '12'}, updatemode='drag'),
             html.Label("Time in Years (T):"),
-            dcc.Slider(id='T', min=0.5, max=10.0, step=0.5, value=2.0, marks={0.5: '0.5', 10: '10'}, updatemode='drag'),
+            dcc.Slider(id='T', min=0.5, max=20.0, step=0.5, value=2.0, marks={0.5: '0.5', 20: '10'}, updatemode='drag'),
             html.Label("Future Value (FV) for Present Value Graph:"),
-            dcc.Slider(id='FV_adjustable', min=1.0, max=1000.0, step=1.0, value=100.0, marks={1: '1', 1000: '1000'}, updatemode='drag'),
+            dcc.Slider(id='FV_adjustable', min=1.0, max=10000.0, step=1.0, value=100.0, marks={1: '1', 10000: '10000'}, updatemode='drag'),
             
             # Bond-Specific Inputs
             html.H3("Bond-Specific Inputs"),
             html.Label("Coupon Rate:"),
             dcc.Slider(id='coupon', min=0.01, max=0.10, step=0.01, value=0.05, marks={0.01: '1%', 0.10: '10%'}, updatemode='drag'),
             html.Label("Face Value:"),
-            dcc.Slider(id='face_value', min=50.0, max=200.0, step=5.0, value=100.0, marks={50: '50', 200: '200'}, updatemode='drag'),
+            dcc.Slider(id='face_value', min=50.0, max=20000.0, step=5.0, value=100.0, marks={50: '50', 20000: '20000'}, updatemode='drag'),
             
             # Results Section at the bottom
             html.Hr(),
