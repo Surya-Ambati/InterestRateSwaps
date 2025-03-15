@@ -128,66 +128,63 @@ app.layout = html.Div([
      State('ytm', 'value'),
      State('years-maturity', 'value')]
 )
+
 def update_metrics(n_clicks, face_value, coupon_rate, ytm, years_maturity):
-    coupon_rate /= 100
-    ytm /= 100
-    
-    # Calculate metrics
-    pv01_val = pv01(face_value, coupon_rate, ytm, years_maturity)
-    pvbp_val = pvbp(face_value, coupon_rate, ytm, years_maturity)
-    conv_val = convexity(face_value, coupon_rate, ytm, years_maturity)
-    price = calculate_bond_price(face_value, coupon_rate, ytm, years_maturity)
-    
-    # Create yield curve
-    ytm_range = np.linspace(ytm - 0.02, ytm + 0.02, 50) * 100
-    prices = [calculate_bond_price(face_value, coupon_rate, y/100, years_maturity) for y in ytm_range]
-    
-    price_yield_fig = go.Figure()
-    price_yield_fig.add_trace(go.Scatter(x=ytm_range, y=prices, mode='lines'))
-    price_yield_fig.update_layout(
-        title='Price-Yield Relationship',
-        xaxis_title='Yield (%)',
-        yaxis_title='Price ($)',
-        template='plotly_white'
-    )
-    
-    # Convexity plot
-    conv_x = np.linspace(-100, 100, 50)
-    conv_y = [0.5 * conv_val * (bp/10000)**2 * 100 for bp in conv_x]
-    
-    convexity_fig = go.Figure()
-    convexity_fig.add_trace(go.Scatter(x=conv_x, y=conv_y, mode='lines'))
-    convexity_fig.update_layout(
-        title='Convexity Impact',
-        xaxis_title='Yield Change (bps)',
-        yaxis_title='Price Impact (cents)',
-        template='plotly_white'
-    )
-    
-    metrics = html.Div([
-        html.H4("Calculated Metrics", style={'marginBottom': '15px'}),
-        html.Div([
-            html.Span("PV01: ", style={'fontWeight': 'bold'}),
-            html.Span(f"{pv01_val:.2f} cents")
-        ], style={'marginBottom': '10px'}),
-        
-        html.Div([
-            html.Span("PVBP: ", style={'fontWeight': 'bold'}),
-            html.Span(f"{pvbp_val:.2f} cents")
-        ], style={'marginBottom': '10px'}),
-        
-        html.Div([
-            html.Span("Convexity: ", style={'fontWeight': 'bold'}),
-            html.Span(f"{conv_val:.2f}")
-        ], style={'marginBottom': '10px'}),
-        
-        html.Div([
-            html.Span("Current Price: ", style={'fontWeight': 'bold'}),
-            html.Span(f"${price:.2f}")
-        ])
-    ], style={'padding': '20px', 'borderRadius': '5px', 'boxShadow': '0 2px 4px rgba(0,0,0,0.1)'})
-    
-    return metrics, price_yield_fig, convexity_fig
+    # Check if any input is missing (e.g., cleared by the user)
+    if any(x is None for x in [face_value, coupon_rate, ytm, years_maturity]):
+        return html.Div("Please enter all parameters."), go.Figure(), go.Figure()
+
+    try:
+        # Convert inputs to appropriate types
+        face_value = float(face_value)
+        coupon_rate = float(coupon_rate) / 100  # Convert percentage to decimal
+        ytm = float(ytm) / 100  # Convert percentage to decimal
+        years_maturity = int(years_maturity)  # Cast to integer for period calculations
+
+        # Perform metric calculations
+        pv01_val = pv01(face_value, coupon_rate, ytm, years_maturity)
+        pvbp_val = pvbp(face_value, coupon_rate, ytm, years_maturity)
+        conv_val = convexity(face_value, coupon_rate, ytm, years_maturity)
+        price = calculate_bond_price(face_value, coupon_rate, ytm, years_maturity)
+
+        # Generate Price-Yield Curve
+        ytm_range = np.linspace(ytm - 0.02, ytm + 0.02, 50) * 100  # YTM range in percentage
+        prices = [calculate_bond_price(face_value, coupon_rate, y / 100, years_maturity) for y in ytm_range]
+        price_yield_fig = go.Figure()
+        price_yield_fig.add_trace(go.Scatter(x=ytm_range, y=prices, mode='lines'))
+        price_yield_fig.update_layout(
+            title='Price-Yield Relationship',
+            xaxis_title='Yield (%)',
+            yaxis_title='Price ($)',
+            template='plotly_white'
+        )
+
+        # Generate Convexity Plot
+        conv_x = np.linspace(-100, 100, 50)  # Yield change in basis points
+        conv_y = [0.5 * conv_val * (bp / 10000) ** 2 * 100 for bp in conv_x]  # Price impact in cents
+        convexity_fig = go.Figure()
+        convexity_fig.add_trace(go.Scatter(x=conv_x, y=conv_y, mode='lines'))
+        convexity_fig.update_layout(
+            title='Convexity Impact',
+            xaxis_title='Yield Change (bps)',
+            yaxis_title='Price Impact (cents)',
+            template='plotly_white'
+        )
+
+        # Format metrics output
+        metrics = html.Div([
+            html.H4("Calculated Metrics", style={'marginBottom': '15px'}),
+            html.Div([html.Span("PV01: ", style={'fontWeight': 'bold'}), html.Span(f"{pv01_val:.2f} cents")], style={'marginBottom': '10px'}),
+            html.Div([html.Span("PVBP: ", style={'fontWeight': 'bold'}), html.Span(f"{pvbp_val:.2f} cents")], style={'marginBottom': '10px'}),
+            html.Div([html.Span("Convexity: ", style={'fontWeight': 'bold'}), html.Span(f"{conv_val:.2f}")], style={'marginBottom': '10px'}),
+            html.Div([html.Span("Current Price: ", style={'fontWeight': 'bold'}), html.Span(f"${price:.2f}")])
+        ], style={'padding': '20px', 'borderRadius': '5px', 'boxShadow': '0 2px 4px rgba(0,0,0,0.1)'})
+
+        return metrics, price_yield_fig, convexity_fig
+
+    except Exception as e:
+        # Display error message if calculations fail
+        return html.Div(f"Calculation Error: {str(e)}"), go.Figure(), go.Figure()    
 
 @app.callback(
     Output('trade-impact-plot', 'figure'),
